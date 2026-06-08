@@ -7,7 +7,8 @@ import { IBook } from "../catalog";
 import { LuExternalLink } from "react-icons/lu";
 
 interface IResultsCard {
-    book: IBook
+    book: IBook,
+    bookAvailable: boolean
 }
 
 const ResultsCard = (property: IResultsCard) => {
@@ -41,47 +42,32 @@ const ResultsCard = (property: IResultsCard) => {
             </Card.Body>
             <Card.Footer flexDir={"column"} gap={4}>
                 <Flex w={"full"} fontWeight={"bold"} justifyContent={"space-between"}>
-                    {property.book.type === "ebook" ?
-                        <>
+                    <Flex gap={1}>
+                        {!property.book.type.includes("ebook") ? null :
                             <Tag.Root size={"md"} colorPalette={"yellow"} py={1} px={3} borderRadius={12}>
                                 <Tag.Label>E-Book</Tag.Label>
                             </Tag.Root>
-                            <Text
-                                fontSize={"small"}
-                                w={"fit-content"}
-                                display={"flex"}
-                                flexDir={"row"}
-                                gap={2}
-                                alignItems={"center"}
-                                color={property.book.url ? "green" : "red"}
-                            >
-                                <Icon>
-                                    <FaCircle/>
-                                </Icon>
-                                {property.book.url ? "Available" : "Not Available"}
-                            </Text>
-                        </>
-                        :
-                        <>
+                        }
+                        {!property.book.type.includes("physical") ? null :
                             <Tag.Root size={"md"} colorPalette={"purple"} py={1} px={3} borderRadius={12}>
                                 <Tag.Label>Physical</Tag.Label>
                             </Tag.Root>
-                            <Text
-                                fontSize={"small"}
-                                w={"fit-content"}
-                                display={"flex"}
-                                flexDir={"row"}
-                                gap={2}
-                                alignItems={"center"}
-                                color={property.book.borrower ? "red" : "green"}
-                            >
-                                <Icon>
-                                    <FaCircle/>
-                                </Icon>
-                                {property.book.borrower ? "Not Available" : "Available"}
-                            </Text>
-                        </>
-                    }
+                        }
+                    </Flex>
+                    <Text
+                        fontSize={"small"}
+                        w={"fit-content"}
+                        display={"flex"}
+                        flexDir={"row"}
+                        gap={2}
+                        alignItems={"center"}
+                        color={property.bookAvailable ? "green" : "red"}
+                    >
+                        <Icon>
+                            <FaCircle/>
+                        </Icon>
+                        {property.bookAvailable ? "Available" : "Not Available"}
+                    </Text>
                 </Flex>
                 {property.book.category.length <= 0 ? null :
                     <Flex w={"full"} gap={2}>
@@ -152,10 +138,15 @@ const SearchResults = (property: ISearchResults) => {
             >
                 <Flex gap={2} flexWrap={"wrap"}>
                     {property.searchResults.map((book, index) => {
+                        const available = (
+                            (book.type.includes("ebook") && book.url) ||
+                            (book.type.includes("physical") && !book.borrower)
+                        ) as boolean;
+
                         return (
                             <Dialog.Root>
                                 <Dialog.Trigger w={{base: "full", lg: "calc((100% - 0.5rem) / 2)", xl: "calc((100% - 1rem) / 3)"}}>
-                                    <ResultsCard key={index} book={book} />
+                                    <ResultsCard key={index} book={book} bookAvailable={available} />
                                 </Dialog.Trigger>
                                 <Portal>
                                     <Dialog.Backdrop />
@@ -172,7 +163,14 @@ const SearchResults = (property: ISearchResults) => {
                                                     <Text><b>Description:</b> {book.description}</Text>
                                                 }
                                                 <Text><b>Owned By:</b> {book.owner}</Text>
-                                                {book.type === "ebook" ?
+                                                {!book.type.includes("ebook") || !book.url ? null :
+                                                    <Text><b>E-book:</b> <Link href={book.url} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link></Text>
+                                                }
+                                                {!book.type.includes("physical") || !book.borrower ? null :
+                                                    <Text><b>Borrowed By:</b> {book.borrower}</Text>
+                                                }
+                                                <AvailabilityTag available={available} />
+                                                {/* {book.type === "ebook" ?
                                                     (book.url ?
                                                         <>
                                                             <Text><b>E-book:</b> <Link href={book.url} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link></Text>
@@ -189,27 +187,6 @@ const SearchResults = (property: ISearchResults) => {
                                                         </>
                                                         :
                                                         <AvailabilityTag available={true} />
-                                                    )
-                                                }
-                                                {/* {book.type === "ebook" ?
-                                                    (book.url ?
-                                                        <Text>
-                                                            <b>E-book:</b> <Link href={book.url} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link>
-                                                        </Text>
-                                                        :
-                                                        <Text>
-                                                            The e-book is currently not available.
-                                                        </Text>
-                                                    )
-                                                    :
-                                                    (book.borrower ?
-                                                        <Text>
-                                                            The book is currently borrowed by {book.borrower}.
-                                                        </Text>
-                                                        :
-                                                        <Text>
-                                                            The book is available.
-                                                        </Text>
                                                     )
                                                 } */}
                                             </Dialog.Body>

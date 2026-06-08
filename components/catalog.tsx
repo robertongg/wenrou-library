@@ -9,7 +9,7 @@ export interface IBook {
     title: String,
     author: String,
     image: string | null,
-    type: String,
+    type: String[],
     owner: String,
     description: String | null,
     category: string[],
@@ -39,16 +39,14 @@ const Catalog = () => {
             const matchesAuthor = book.author && book.author.toUpperCase().includes(searchValue.toUpperCase());
             const matchesDescription = book.description && book.description.toUpperCase().includes(searchValue.toUpperCase());
 
+            const isBookAvailable = (
+                (book.type.includes("ebook") && book.url) ||
+                (book.type.includes("physical") && !book.borrower)
+            );
             const matchesStatus = (
                 searchStatus === "All" ||
-                (searchStatus === "Available" && (
-                    (book.type === "ebook" && book.url) ||
-                    (book.type !== "ebook" && !book.borrower)
-                )) ||
-                (searchStatus === "Not Available" && (
-                    (book.type === "ebook" && !book.url) ||
-                    (book.type !== "ebook" && book.borrower)
-                ))
+                (searchStatus === "Available" && isBookAvailable) ||
+                (searchStatus === "Not Available" && !isBookAvailable)
             );
 
             let matchesCategories = false;
