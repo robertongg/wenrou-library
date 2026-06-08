@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f6f7fb;
   --foreground: #171717;
+  --primary: #2563eb;
+  --muted: #64748b;
+  --primary-text: #ffffff;
+  --filter-panel-background: #fff;
+  --card-shadow: 0 10px 25px rgba(0,0,0,.08);
+  --filter-status-button: #f1f5f9;
+  --filter-status-button-hover: #e2e8f0;
+  --filter-status-primary-hover: #1d4ed8;
+  --filter-category-checkbox-hover: 1px solid var(--primary);
+  --card-no-image-background: linear-gradient(135deg,#e2e8f0,#cbd5e1);
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+#header p {
+  color: var(--muted);
+}
+
+.filter-panel {
+  background: var(--filter-panel-background);
+  box-shadow: var(--card-shadow);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.filter-header {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.filter-status button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--filter-status-button);
+  color: var(--foreground);
+}
+
+.filter-status button:hover {
+  background: var(--filter-status-button-hover);
+}
+
+.filter-status button.active{
+    background-color: var(--primary);
+    color: white;
+}
+
+.filter-status button.active:hover {
+  background-color: var(--filter-status-primary-hover);
+}
+
+.filter-category:hover .chakra-checkbox__control {
+  border: var(--filter-category-checkbox-hover);
+}
+
+.filter-category.select-all {
+  color: var(--primary);
+}
+
+#filter-button-mobile {
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.total-books {
+  color: var(--muted);
+}
+
+.results-not-found {
+  color: var(--muted);
+}
+
+.card {
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  transition: .2s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card-image {
+  background: var(--card-no-image-background);
+  color: var(--muted);
 }
