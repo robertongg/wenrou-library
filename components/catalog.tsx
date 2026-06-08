@@ -41,8 +41,14 @@ const Catalog = () => {
 
             const matchesStatus = (
                 searchStatus === "All" ||
-                (searchStatus === "Available" && (book.type === "ebook" || !book.borrower)) ||
-                (searchStatus === "Not Available" && book.borrower)
+                (searchStatus === "Available" && (
+                    (book.type === "ebook" && book.url) ||
+                    (book.type !== "ebook" && !book.borrower)
+                )) ||
+                (searchStatus === "Not Available" && (
+                    (book.type === "ebook" && !book.url) ||
+                    (book.type !== "ebook" && book.borrower)
+                ))
             );
 
             let matchesCategories = false;
