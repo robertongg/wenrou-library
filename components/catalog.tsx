@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 export interface IBook {
     title: String,
     author: String,
-    image: String | null,
+    image: string | null,
     type: String,
-    owner: String | null,
+    owner: String,
     description: String | null,
     category: string[],
     borrower: String | null,

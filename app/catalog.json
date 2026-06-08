@@ -13,7 +13,7 @@
         }, {
             "title": "The Cost of Discipleship",
             "author": "Dietrich Bonhoeffer",
-            "image": "url 1",
+            "image": "https://covers.openlibrary.org/b/id/8231856-L.jpg",
             "type": "physical",
             "owner": "person 3",
             "description": null,
@@ -23,13 +23,23 @@
         }, {
             "title": "Mirror Mirror",
             "author": "Graham Beynon",
-            "image": "url 3",
+            "image": "https://covers.openlibrary.org/b/id/10594755-L.jpg",
             "type": "ebook",
-            "owner": null,
-            "description": "something else",
+            "owner": "Jane",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "category": ["Identity"],
             "borrower": null,
-            "url": "https://covers.openlibrary.org/b/id/8231856-L.jpg"
+            "url": "https://google.com"
+        }, {
+            "title": "Hello world",
+            "author": "idk who",
+            "image": null,
+            "type": "ebook",
+            "owner": "Jason",
+            "description": "programming",
+            "category": ["Work/Busyness"],
+            "borrower": null,
+            "url": null
         }
     ]
 }

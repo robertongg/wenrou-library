@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light !important;
+  color-scheme: light!important;
   --background: #f6f7fb;
   --foreground: #171717;
   --primary: #2563eb;
@@ -14,6 +14,14 @@
   --filter-status-primary-hover: #1d4ed8;
   --filter-category-checkbox-hover: 1px solid var(--primary);
   --card-no-image-background: linear-gradient(135deg,#e2e8f0,#cbd5e1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light!important;
+    --background: #f6f7fb;
+    --foreground: #171717;
+  }
 }
 
 body {
@@ -95,4 +103,15 @@ body {
 .card-image {
   background: var(--card-no-image-background);
   color: var(--muted);
+}
+
+.card-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.book-link {
+  color: var(--primary);
 }
