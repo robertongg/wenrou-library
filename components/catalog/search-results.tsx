@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Card, CloseButton, Dialog, Flex, Heading, Icon, Image, Link, Portal, Tag, Text } from "@chakra-ui/react";
+import { Box, Card, CloseButton, Dialog, Flex, Heading, Icon, Image, Link, Portal, Tag, Text } from "@chakra-ui/react";
 import { Dispatch, SetStateAction } from "react";
 import { FaCircle } from "react-icons/fa";
 import { IBook } from "../catalog";
@@ -164,31 +164,12 @@ const SearchResults = (property: ISearchResults) => {
                                                 }
                                                 <Text><b>Owned By:</b> {book.owner}</Text>
                                                 {!book.type.includes("ebook") || !book.url ? null :
-                                                    <Text><b>E-book:</b> <Link href={book.url} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link></Text>
+                                                    <Text><b>E-book:</b> <Link href={book.url} target={"_blank"} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link></Text>
                                                 }
                                                 {!book.type.includes("physical") || !book.borrower ? null :
                                                     <Text><b>Borrowed By:</b> {book.borrower}</Text>
                                                 }
                                                 <AvailabilityTag available={available} />
-                                                {/* {book.type === "ebook" ?
-                                                    (book.url ?
-                                                        <>
-                                                            <Text><b>E-book:</b> <Link href={book.url} variant={"underline"} className="book-link">Click here <LuExternalLink /></Link></Text>
-                                                            <AvailabilityTag available={true} />
-                                                        </>
-                                                        :
-                                                        <AvailabilityTag available={false} />
-                                                    )
-                                                    :
-                                                    (book.borrower ?
-                                                        <>
-                                                            <Text><b>Borrowed By:</b> {book.borrower}</Text>
-                                                            <AvailabilityTag available={false} />
-                                                        </>
-                                                        :
-                                                        <AvailabilityTag available={true} />
-                                                    )
-                                                } */}
                                             </Dialog.Body>
                                             <Dialog.CloseTrigger>
                                                 <CloseButton size={"sm"} />
