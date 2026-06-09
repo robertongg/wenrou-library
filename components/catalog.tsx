@@ -4,6 +4,8 @@ import { Flex } from "@chakra-ui/react";
 import SearchFilters from "./catalog/search-filters";
 import SearchResults from "./catalog/search-results";
 import { useEffect, useState } from "react";
+import { createClient } from "../utils/supabase/client";
+// import { Books, IBook } from "../utils/data/books";
 
 export interface IBook {
     title: String,
@@ -18,18 +20,59 @@ export interface IBook {
 }
 
 const Catalog = () => {
+    // FETCH DATA FROM DATABASE
+    const [categoriesArray, setCategoriesArray] = useState<string[]>([]);
+    const [bookList, setBookList] = useState<IBook[]>([]);
+    const [searchResults, setSearchResults] = useState<IBook[]>([]);
+
+    const fetchData = async() => {
+        const supabase = await createClient();
+        const { data: categories } = await supabase.from("BOOK_CATEGORY").select("category");
+
+        setCategoriesArray(categories ? categories.map((category) => category.category) : []);
+
+        const { data: books } = await supabase.from("BOOKS").select(`
+            title,
+            author,
+            description,
+            BOOKS_CATEGORY!inner(category),
+            BOOKS_TYPE!inner(type),
+            image,
+            url,
+            owner,
+            borrower
+        `);
+
+        let bookListTemp : IBook[] = [];
+        books?.forEach((book) => {
+            bookListTemp.push({
+                title: book.title,
+                author: book.author,
+                description: book.description,
+                category: book.BOOKS_CATEGORY.map((category) => category.category),
+                type : book.BOOKS_TYPE.map((type) => type.type),
+                image: book.image,
+                url: book.image,
+                owner: book.owner,
+                borrower: book.borrower
+            });
+        })
+
+        setBookList(bookListTemp ? bookListTemp : []);
+        setSearchResults(bookListTemp ? bookListTemp : []);
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     // SEARCH CRITERIA
     const [searchValue, setSearchValue] = useState("");
     
     const statusArray = ["All", "Available", "Not Available"];
     const [searchStatus, setSearchStatus] = useState(statusArray[0]);
 
-    const categoriesArray = ["Bible Overview", "Bible Tools", "Church", "Cross & Ressurection", "Devotional", "Discipleship", "Evangelism", "Fighting Sin", "God's Character", "Identity", "Mental Health", "Prayer", "Relationship & Gender", "Work/Busyness"];
     const [searchCategories, setSearchCategories] = useState<string[]>([]);
-
-    // SEARCH RESULTS
-    const bookList: IBook[] = require("../app/catalog.json").$schema;
-    const [searchResults, setSearchResults] = useState(bookList);
 
     // SEARCH FILTERS
     useEffect(() => {
