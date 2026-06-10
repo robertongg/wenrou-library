@@ -1,8 +1,10 @@
-'use server';
-
 import { google } from "googleapis";
+import { NextResponse } from 'next/server';
 
-export async function getSheetRows(range: string) {
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+export async function GET() {
     try {
         const auth = new google.auth.JWT({
             email: "service-account@wenrou-library.iam.gserviceaccount.com",
@@ -14,12 +16,12 @@ export async function getSheetRows(range: string) {
         
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: "193P7sTidnhJKZ-gBi0DB7at0z1L4qEQx-wRQuxEHRko",
-            range: range,
+            range: "Categories!$A:$A",
         });
 
-        return response.data.values || [];
+        return NextResponse.json({ data: response.data.values || [] });
     } catch (error) {
-        console.error("Error fetching sheets data:", error);
-        return [];
+        // console.error("Error fetching sheets data:", error);
+        return NextResponse.json({ error: 'Failed to fetch Google data' }, { status: 500 });
     }
 }

@@ -5,7 +5,7 @@ import SearchFilters from "./catalog/search-filters";
 import SearchResults from "./catalog/search-results";
 import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
-import { getSheetRows } from "../app/actions/sheets";
+// import { getSheetRows } from "../utils/google/sheets";
 
 export interface IBook {
     title: String,
@@ -62,51 +62,64 @@ const Catalog = () => {
         setSearchResults(bookListTemp ? bookListTemp : []);
     }
 
-    const fetchDataGSheet = async() => {
+    const fetchDataGSheet = () => {
 
-        const categories = await getSheetRows("Categories!$A:$A");
-        setCategoriesArray(categories ? categories.map((category) => category[0]) : []);
+        fetch('/wenrou-library/api/google/book-categories')
+            .then((res) => res.json())
+            .then((json) => {
+                setCategoriesArray(json.data ? json.data.map((category : string[]) => category[0]) : []);
+            });
 
-        const books : String[][] = await getSheetRows("Book List!$A:$I");
-        const columnIndex_title = books[0].indexOf("title");
-        const columnIndex_author = books[0].indexOf("author");
-        const columnIndex_description = books[0].indexOf("description");
-        const columnIndex_category = books[0].indexOf("category");
-        const columnIndex_type = books[0].indexOf("type");
-        const columnIndex_image = books[0].indexOf("image");
-        const columnIndex_url = books[0].indexOf("url");
-        const columnIndex_owner = books[0].indexOf("owner");
-        const columnIndex_borrower = books[0].indexOf("borrower");
-        
-        let bookListTemp : IBook[] = [];
-        books.forEach((book, index) => {
-            if (index > 0) {
-                bookListTemp.push({
-                    title: book.length > columnIndex_title ? book[columnIndex_title] : "",
-                    author: book.length > columnIndex_author ? book[columnIndex_author] : "",
-                    description: book.length > columnIndex_description ? book[columnIndex_description] : null,
-                    category: book.length > columnIndex_category ? book[columnIndex_category].split(", ") : [],
-                    type: book.length > columnIndex_type ? book[columnIndex_type].split(", ").map((type) => {
-                        if (type === "E-book") {
-                            return "ebook";
+        fetch('/wenrou-library/api/google/books')
+            .then((res) => res.json())
+            .then((json) => {
+                const books : String[][] = json.data;
+
+                if (books) {
+                    const columnIndex_title = books[0].indexOf("title");
+                    const columnIndex_author = books[0].indexOf("author");
+                    const columnIndex_description = books[0].indexOf("description");
+                    const columnIndex_category = books[0].indexOf("category");
+                    const columnIndex_type = books[0].indexOf("type");
+                    const columnIndex_image = books[0].indexOf("image");
+                    const columnIndex_url = books[0].indexOf("url");
+                    const columnIndex_owner = books[0].indexOf("owner");
+                    const columnIndex_borrower = books[0].indexOf("borrower");
+
+                    let bookListTemp : IBook[] = [];
+                    books.forEach((book, index) => {
+                        if (index > 0) {
+                            bookListTemp.push({
+                                title: book.length > columnIndex_title ? book[columnIndex_title] : "",
+                                author: book.length > columnIndex_author ? book[columnIndex_author] : "",
+                                description: book.length > columnIndex_description ? book[columnIndex_description] : null,
+                                category: book.length > columnIndex_category ? book[columnIndex_category].split(", ") : [],
+                                type: book.length > columnIndex_type ? book[columnIndex_type].split(", ").map((type) => {
+                                    if (type === "E-book") {
+                                        return "ebook";
+                                    }
+
+                                    if (type === "Physical") {
+                                        return "physical";
+                                    }
+
+                                    return type;
+                                }) : [],
+                                image: book.length > columnIndex_image ? book[columnIndex_image].toString() : null,
+                                url: book.length > columnIndex_url ? book[columnIndex_url].toString() : null,
+                                owner: book.length > columnIndex_owner ? book[columnIndex_owner] : "",
+                                borrower: book.length > columnIndex_borrower ? book[columnIndex_borrower] : null
+                            });
                         }
+                    });
 
-                        if (type === "Physical") {
-                            return "physical";
-                        }
-
-                        return type;
-                    }) : [],
-                    image: book.length > columnIndex_image ? book[columnIndex_image].toString() : null,
-                    url: book.length > columnIndex_url ? book[columnIndex_url].toString() : null,
-                    owner: book.length > columnIndex_owner ? book[columnIndex_owner] : "",
-                    borrower: book.length > columnIndex_borrower ? book[columnIndex_borrower] : null
-                });
-            }
-        });
-
-        setBookList(bookListTemp);
-        setSearchResults(bookListTemp);
+                    setBookList(bookListTemp);
+                    setSearchResults(bookListTemp);
+                } else {
+                    setBookList([]);
+                    setSearchResults([]);
+                }
+            });
     }
 
     useEffect(() => {
@@ -163,7 +176,7 @@ const Catalog = () => {
     }, [searchValue, searchStatus, searchCategories]);
 
     useEffect(() => {
-        console.log("Search results done!");
+        // console.log("Search results done!");
     }, [searchResults]);
 
     return (
