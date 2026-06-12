@@ -2,7 +2,9 @@ name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: ["main"] # Ensure this matches your default branch name
+    branches: ["master"] # Ensure this matches your default branch name
+  schedule:
+    - cron: "0 16 * * *" # 16:00 UTC daily (Midnight SGT)
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
