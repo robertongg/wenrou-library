@@ -133,16 +133,22 @@ const Catalog = () => {
     const statusArray = ["All", "Available", "Not Available"];
     const [searchStatus, setSearchStatus] = useState(statusArray[0]);
 
+    const typeArray = ["All", "Physical", "E-book"];
+    const [searchType, setSearchType] = useState(typeArray[0]);
+
     const [searchCategories, setSearchCategories] = useState<string[]>([]);
 
     // SEARCH FILTERS
     useEffect(() => {
 
         const resultsAfterFilter = bookList.filter((book) => {
+
+            // SEARCH BY KEYWORDS
             const matchesTitle = book.title.toUpperCase().includes(searchValue.toUpperCase());
             const matchesAuthor = book.author && book.author.toUpperCase().includes(searchValue.toUpperCase());
             const matchesDescription = book.description && book.description.toUpperCase().includes(searchValue.toUpperCase());
 
+            // SEARCH BY BOOK AVAILABILITY
             const isBookAvailable = (
                 (book.type.includes("ebook") && book.url) ||
                 (book.type.includes("physical") && !book.borrower)
@@ -153,6 +159,14 @@ const Catalog = () => {
                 (searchStatus === "Not Available" && !isBookAvailable)
             );
 
+            // SEARCH BY BOOK TYPE
+            const matchesType = (
+                (searchType === "All") ||
+                (searchType === "Physical" && book.type.includes("physical")) ||
+                (searchType === "E-book" && book.type.includes("ebook"))
+            )
+
+            // SEARCH BY BOOK CATEGORY
             let matchesCategories = false;
             if (searchCategories.length <= 0) {
                 matchesCategories = true;
@@ -166,6 +180,7 @@ const Catalog = () => {
 
             return (
                 (matchesTitle || matchesAuthor || matchesDescription) &&
+                matchesType &&
                 matchesStatus &&
                 matchesCategories
             );
@@ -173,7 +188,7 @@ const Catalog = () => {
 
         setSearchResults(resultsAfterFilter);
 
-    }, [searchValue, searchStatus, searchCategories]);
+    }, [searchValue, searchStatus, searchType, searchCategories]);
 
     useEffect(() => {
         // console.log("Search results done!");
@@ -187,6 +202,9 @@ const Catalog = () => {
                 statusArray={statusArray}
                 searchStatus={searchStatus}
                 setSearchStatus={setSearchStatus}
+                typeArray={typeArray}
+                searchType={searchType}
+                setSearchType={setSearchType}
                 categoriesArray={categoriesArray}
                 searchCategories={searchCategories}
                 setSearchCategories={setSearchCategories}

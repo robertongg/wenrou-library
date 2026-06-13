@@ -11,6 +11,9 @@ interface ISearchFilters {
     statusArray: string[],
     searchStatus: string,
     setSearchStatus: Dispatch<SetStateAction<string>>,
+    typeArray: string[],
+    searchType: string,
+    setSearchType: Dispatch<SetStateAction<string>>,
     categoriesArray: string[],
     searchCategories: string[],
     setSearchCategories: Dispatch<SetStateAction<string[]>>,
@@ -24,6 +27,14 @@ const SearchFilters = (property: ISearchFilters) => {
             property.setSearchValue("");
         }} />
     );
+
+    const clearFilters = () => {
+        property.setSearchValue("");
+        property.setSearchStatus(property.statusArray[0]);
+        property.setSearchType(property.typeArray[0]);
+        property.setSearchCategories([]);
+        setSelectAll(false);
+    }
 
     return (
         <>
@@ -48,91 +59,112 @@ const SearchFilters = (property: ISearchFilters) => {
                         }}
                     />
                 </InputGroup>
-                <Box>
-                    <Heading className="filter-header">STATUS</Heading>
-                    <ButtonGroup
-                        className="filter-status"
-                        display={"flex"}
-                        flexDir={"column"}
-                    >
-                        {property.statusArray.map((item) => {
-                            return (
-                                <Button
-                                    className={property.searchStatus === item ? "active pointer-events-auto" : "pointer-events-auto"}
-                                    onClick={() => property.setSearchStatus(item)}
-                                >
-                                    {item}
-                                </Button>
-                            );
-                        })}
-                    </ButtonGroup>
-                </Box>
-                <Box>
-                    <Heading className="filter-header">CATEGORIES ({property.searchCategories.length > 0 ? property.searchCategories.length : property.categoriesArray.length})</Heading>
-                    <Fieldset.Root>
-                        <Checkbox.Root
-                            className="filter-category select-all"
-                            value={"Select All"}
-                            colorPalette={"blue"}
-                            w={"fit-content"}
-                            cursor={"pointer"}
-                            checked={selectAll}
-                            onCheckedChange={(e) => {
-                                if (e.checked) {
-                                    property.setSearchCategories(property.categoriesArray)
-                                    setSelectAll(true);
-                                } else {
-                                    property.setSearchCategories([]);
-                                    setSelectAll(false);
-                                }
-                            }}
+                <Flex
+                    w={"full"}
+                    flexDir={"column"}
+                    gap={4}
+                    h={"max(calc(100vh - 309px), 500px)"}
+                    overflow={"auto"}
+                    scrollbarGutter={"stable"}
+                >
+                    <Box>
+                        <Heading className="filter-header">STATUS</Heading>
+                        <ButtonGroup
+                            className="filter-status-type"
+                            display={"flex"}
+                            flexDir={"column"}
                         >
-                            <Checkbox.HiddenInput />
-                            <Checkbox.Control cursor={"pointer"} />
-                            <Checkbox.Label>Select All</Checkbox.Label>
-                        </Checkbox.Root>
-                        <CheckboxGroup
-                            maxH={"180px"}
-                            overflow={"auto"}
-                            name="filterCategory"
-                            value={property.searchCategories}
-                            onValueChange={(e) => {
-                                property.setSearchCategories(e);
-                                setSelectAll(e.length === property.searchCategories.length);
-                            }}
+                            {property.statusArray.map((item) => {
+                                return (
+                                    <Button
+                                        className={property.searchStatus === item ? "active pointer-events-auto" : "pointer-events-auto"}
+                                        onClick={() => property.setSearchStatus(item)}
+                                    >
+                                        {item}
+                                    </Button>
+                                );
+                            })}
+                        </ButtonGroup>
+                    </Box>
+                    <Box>
+                        <Heading className="filter-header">TYPE</Heading>
+                        <ButtonGroup
+                            className="filter-status-type"
+                            display={"flex"}
+                            flexDir={"column"}
                         >
-                            <Fieldset.Content>
-                                {property.categoriesArray.map((item) => {
-                                    return (
-                                        <Checkbox.Root
-                                            className="filter-category"
-                                            key={item}
-                                            value={item}
-                                            defaultChecked={property.searchCategories.includes(item)}
-                                            colorPalette={"blue"}
-                                            w={"fit-content"}
-                                            cursor={"pointer"}
-                                        >
-                                            <Checkbox.HiddenInput />
-                                            <Checkbox.Control cursor={"pointer"} />
-                                            <Checkbox.Label>{item}</Checkbox.Label>
-                                        </Checkbox.Root>
-                                    );
-                                })}
-                            </Fieldset.Content>
-                        </CheckboxGroup>
-                    </Fieldset.Root>
-                </Box>
+                            {property.typeArray.map((item) => {
+                                return (
+                                    <Button
+                                        className={property.searchType === item ? "active pointer-events-auto" : "pointer-events-auto"}
+                                        onClick={() => property.setSearchType(item)}
+                                    >
+                                        {item}
+                                    </Button>
+                                );
+                            })}
+                        </ButtonGroup>
+                    </Box>
+                    <Box>
+                        <Heading className="filter-header">CATEGORIES ({property.searchCategories.length > 0 ? property.searchCategories.length : property.categoriesArray.length})</Heading>
+                        <Fieldset.Root>
+                            <Checkbox.Root
+                                className="filter-category select-all"
+                                value={"Select All"}
+                                colorPalette={"blue"}
+                                w={"fit-content"}
+                                cursor={"pointer"}
+                                checked={selectAll}
+                                onCheckedChange={(e) => {
+                                    if (e.checked) {
+                                        property.setSearchCategories(property.categoriesArray)
+                                        setSelectAll(true);
+                                    } else {
+                                        property.setSearchCategories([]);
+                                        setSelectAll(false);
+                                    }
+                                }}
+                            >
+                                <Checkbox.HiddenInput />
+                                <Checkbox.Control cursor={"pointer"} />
+                                <Checkbox.Label>Select All</Checkbox.Label>
+                            </Checkbox.Root>
+                            <CheckboxGroup
+                                name="filterCategory"
+                                value={property.searchCategories}
+                                onValueChange={(e) => {
+                                    property.setSearchCategories(e);
+                                    setSelectAll(e.length === property.searchCategories.length);
+                                }}
+                            >
+                                <Fieldset.Content>
+                                    {property.categoriesArray.map((item) => {
+                                        return (
+                                            <Checkbox.Root
+                                                className="filter-category"
+                                                key={item}
+                                                value={item}
+                                                defaultChecked={property.searchCategories.includes(item)}
+                                                colorPalette={"blue"}
+                                                w={"fit-content"}
+                                                cursor={"pointer"}
+                                            >
+                                                <Checkbox.HiddenInput />
+                                                <Checkbox.Control cursor={"pointer"} />
+                                                <Checkbox.Label>{item}</Checkbox.Label>
+                                            </Checkbox.Root>
+                                        );
+                                    })}
+                                </Fieldset.Content>
+                            </CheckboxGroup>
+                        </Fieldset.Root>
+                    </Box>
+                </Flex>
                 <Button
                     w={"full"}
                     colorPalette={"red"}
                     borderRadius={10}
-                    onClick={() => {
-                        property.setSearchValue("");
-                        property.setSearchStatus(property.statusArray[0]);
-                        property.setSearchCategories([]);
-                        setSelectAll(false);
-                    }}
+                    onClick={clearFilters}
                 >
                     Clear Filter
                 </Button>
@@ -173,7 +205,7 @@ const SearchFilters = (property: ISearchFilters) => {
                                     <Box>
                                         <Heading className="filter-header">STATUS</Heading>
                                         <ButtonGroup
-                                            className="filter-status"
+                                            className="filter-status-type"
                                             display={"flex"}
                                             flexDir={"column"}
                                         >
@@ -182,6 +214,25 @@ const SearchFilters = (property: ISearchFilters) => {
                                                     <Button
                                                         className={property.searchStatus === item ? "active pointer-events-auto" : "pointer-events-auto"}
                                                         onClick={() => property.setSearchStatus(item)}
+                                                    >
+                                                        {item}
+                                                    </Button>
+                                                );
+                                            })}
+                                        </ButtonGroup>
+                                    </Box>
+                                    <Box>
+                                        <Heading className="filter-header">TYPE</Heading>
+                                        <ButtonGroup
+                                            className="filter-status-type"
+                                            display={"flex"}
+                                            flexDir={"column"}
+                                        >
+                                            {property.typeArray.map((item) => {
+                                                return (
+                                                    <Button
+                                                        className={property.searchType === item ? "active pointer-events-auto" : "pointer-events-auto"}
+                                                        onClick={() => property.setSearchType(item)}
                                                     >
                                                         {item}
                                                     </Button>
@@ -249,12 +300,7 @@ const SearchFilters = (property: ISearchFilters) => {
                                     w={"calc((100% - 0.5rem) / 2)"}
                                     colorPalette={"red"}
                                     borderRadius={10}
-                                    onClick={() => {
-                                        property.setSearchValue("");
-                                        property.setSearchStatus(property.statusArray[0]);
-                                        property.setSearchCategories([]);
-                                        setSelectAll(false);
-                                    }}
+                                    onClick={clearFilters}
                                 >
                                     Clear Filter
                                 </Button>

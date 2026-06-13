@@ -9,9 +9,9 @@
   --primary-text: #ffffff;
   --filter-panel-background: #fff;
   --card-shadow: 0 10px 25px rgba(0,0,0,.08);
-  --filter-status-button: #f1f5f9;
-  --filter-status-button-hover: #e2e8f0;
-  --filter-status-primary-hover: #1d4ed8;
+  --filter-status-type-button: #f1f5f9;
+  --filter-status-type-button-hover: #e2e8f0;
+  --filter-status-type-primary-hover: #1d4ed8;
   --filter-category-checkbox-hover: 1px solid var(--primary);
   --card-no-image-background: linear-gradient(135deg,#e2e8f0,#cbd5e1);
 }
@@ -47,26 +47,26 @@ body {
   margin-bottom: 10px;
 }
 
-.filter-status button {
+.filter-status-type button {
   width: 100%;
   padding: 10px;
   border: none;
   border-radius: 10px;
-  background-color: var(--filter-status-button);
+  background-color: var(--filter-status-type-button);
   color: var(--foreground);
 }
 
-.filter-status button:hover {
-  background: var(--filter-status-button-hover);
+.filter-status-type button:hover {
+  background: var(--filter-status-type-button-hover);
 }
 
-.filter-status button.active{
+.filter-status-type button.active{
     background-color: var(--primary);
     color: white;
 }
 
-.filter-status button.active:hover {
-  background-color: var(--filter-status-primary-hover);
+.filter-status-type button.active:hover {
+  background-color: var(--filter-status-type-primary-hover);
 }
 
 .filter-category:hover .chakra-checkbox__control {
