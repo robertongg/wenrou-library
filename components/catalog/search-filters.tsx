@@ -1,9 +1,10 @@
 "use client";
 
-import { Box, Button, ButtonGroup, Checkbox, CheckboxGroup, CloseButton, Drawer, Fieldset, Flex, Heading, Icon, Input, InputGroup, Portal, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Checkbox, CheckboxGroup, CloseButton, Drawer, Fieldset, Flex, Heading, Icon, Input, InputGroup, Link, Portal, Text } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { BsFilter } from "react-icons/bs";
 import { LuSearch } from "react-icons/lu";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 interface ISearchFilters {
     searchValue: string,
@@ -38,6 +39,7 @@ const SearchFilters = (property: ISearchFilters) => {
 
     return (
         <>
+            {/* DESKTOP VIEW */}
             <Flex
                 display={{base: "none", md: "flex"}}
                 className="filter-panel"
@@ -169,6 +171,8 @@ const SearchFilters = (property: ISearchFilters) => {
                     Clear Filter
                 </Button>
             </Flex>
+
+            {/* MOBILE VIEW */}
             <Drawer.Root size={"full"} placement={"start"}>
                 <Drawer.Trigger>
                     <Button w={"full"} id="filter-button-mobile" display={{base: "flex", md: "none"}}>
@@ -322,6 +326,23 @@ const SearchFilters = (property: ISearchFilters) => {
                     </Drawer.Positioner>
                 </Portal>
             </Drawer.Root>
+            <Link href="#">
+                <Button
+                    display={{base: "block", md: "none"}}
+                    variant={"solid"}
+                    position={"fixed"}
+                    bottom={5}
+                    right={5}
+                    zIndex={10}
+                    rounded={"full"}
+                    p={0}
+                    size={"lg"}
+                >
+                    <Icon>
+                        <MdOutlineKeyboardArrowUp />
+                    </Icon>
+                </Button>
+            </Link>
         </>
     );
 }
