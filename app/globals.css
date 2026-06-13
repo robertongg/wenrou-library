@@ -105,7 +105,7 @@ body {
   color: var(--muted);
 }
 
-.card-description {
+.card-title, .card-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

@@ -34,7 +34,7 @@ const ResultsCard = (property: IResultsCard) => {
                 }
             </Flex>
             <Card.Body gap={2}>
-                <Card.Title>{property.book.title}</Card.Title>
+                <Card.Title className="card-title">{property.book.title}</Card.Title>
                 <Text fontSize={"sm"}>{property.book.author}</Text>
                 {!property.book.description ? null :
                     <Card.Description className="card-description">{property.book.description}</Card.Description>
@@ -144,14 +144,26 @@ const SearchResults = (property: ISearchResults) => {
                         ) as boolean;
 
                         return (
-                            <Dialog.Root>
+                            <Dialog.Root placement={"center"}>
                                 <Dialog.Trigger w={{base: "full", lg: "calc((100% - 0.5rem) / 2)", xl: "calc((100% - 1rem) / 3)"}}>
                                     <ResultsCard key={index} book={book} bookAvailable={available} />
                                 </Dialog.Trigger>
                                 <Portal>
                                     <Dialog.Backdrop />
                                     <Dialog.Positioner>
-                                        <Dialog.Content>
+                                        <Dialog.Content overflow={"hidden"}>
+                                            {!book.image ? null :
+                                                <Box
+                                                    className="card-image"
+                                                >
+                                                    <Image
+                                                        w={"full"}
+                                                        h={"250px"}
+                                                        objectFit={"contain"}
+                                                        src={book.image}
+                                                    />
+                                                </Box>
+                                            }
                                             <Dialog.Header>
                                                 <Dialog.Title>
                                                     {book.title}
